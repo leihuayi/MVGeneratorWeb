@@ -1,0 +1,3 @@
+[submodule "YoutubeMVGenerator"]
+	path = YoutubeMVGenerator
+	url = https://github.com/leihuayi/YoutubeMVGenerator.git
