@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+     <title>YoutubeMVGenerator</title>
+     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    </head>
+    <body>
+        <h1>YoutubeMVGenerator</h1>
+        <p>Try uploading a music !</p>
+        <input type="file" id="upload_audio" onclick="connectChatServer()" onchange="sendFile()" />
+        <video id="video_holder"></video>
+
+        <script>
+                var ws;
+                var ws_status = false;
+        
+                function connectChatServer() {
+                    ws = new WebSocket("ws://127.0.0.1:8765");
+        
+                    ws.binaryType = "blob"
+    
+                    ws.onmessage = function (evt) {
+                        if (typeof evt.data == "string") {
+                            console.log(evt.data);
+                            ws_status = true
+                        }
+                        else {
+                            console.log("received video blob")
+                            saveByteArray([evt.data], 'video.mp4');
+                        }
+                    };
+    
+                    ws.onclose = function() {
+                        ws_status = false
+                    };
+                    ws.onerror = function(e) {
+                        alert(e.msg);
+                        ws_status = false
+                    }
+        
+                }
+        
+                function sendFile() {
+                    if (ws_status) {
+                        var file = document.getElementById('upload_audio').files[0];
+                        console.log('file name:'+file.name);
+                        var reader = new FileReader();
+                        var rawData = new ArrayBuffer();            
+            
+                        reader.loadend = function() {
+            
+                        }
+                        reader.onload = function(e) {
+                            rawData = e.target.result;
+                            ws.send(rawData)
+                            console.log("the File has been transferred.")
+                        }
+            
+                        reader.readAsArrayBuffer(file);
+                    }
+                    else {
+                        alert("The server is currently busy. Please try another time");
+                    }
+        
+                }
+    
+                function process(blob) {
+    
+                    const
+                    BYTES_PER_CHUNK = 1024 * 1024 * 2;
+                    // 2MB chunk sizes.
+                    const
+                    SIZE = blob.size;
+    
+                    var start = 0;
+                    var end = BYTES_PER_CHUNK;
+    
+                    while (start < SIZE) {
+    
+                        if ('mozSlice' in blob) {
+                            var chunk = blob.mozSlice(start, end);
+                        } else if ('slice' in blob) {
+                                var chunk = blob.slice(start, end);
+                        } else {
+                            var chunk = blob.webkitSlice(start, end);
+                        }
+    
+                        ws.send(chunk);
+    
+                        start = end;
+                        end = start + BYTES_PER_CHUNK;
+                    }
+                    ws.send(JSON.stringify({
+                        "cmd" : 2,
+                        "data" : blob.name
+                    }));
+                    //self.postMessage(blob.name + " Uploaded Succesfully");
+                }
+    
+                var saveByteArray = (function () {
+                    var a = document.createElement("a");
+                    document.body.appendChild(a);
+                    a.style = "display: none";
+                    return function (data, name) {
+                        var blob = new Blob(data, {type: "octet/stream"}),
+                            url = window.URL.createObjectURL(blob);
+                        a.href = url;
+                        a.download = name;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    };
+                }());
+
+                function displayVideo(data) {
+
+                    var blob = new Blob(data, {type: "video/mp4"});
+                    var url = window.URL.createObjectURL(blob);
+
+                    var video = document.getElementById("video_holder")
+                    video.src = url;
+                }
+                
+            </script>
+    </body>
+</html>
