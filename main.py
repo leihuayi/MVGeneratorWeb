@@ -1,46 +1,31 @@
 import asyncio
 import websockets
-import uuid
 import tempfile
+import uuid
 import argparse
-import sys
 
-#from YoutubeMVGenerator.code.generate_mv import main as gen
+from YoutubeMVGenerator.code.generate_mv import main as gen
 
-currentSlot = ''
 
 @asyncio.coroutine
 def slot(websocket, path):
-    
+    connectionId = str(uuid.uuid4())
+
     # Opening socket : send UUID
     print('open socket')
-    global currentSlot
-    if currentSlot != '':
-        print('Closing websocket')
-        yield from websocket.close()
-        return
-
-    currentSlot = str(uuid.uuid4())
-    print('sending UUID')
-    yield from websocket.send(currentSlot)
 
     # If receive audio
     print('waiting for audio file ....')
-    try :
-        audioBinFile = yield from websocket.recv()
-        print('got audio')
 
-    except websockets.exceptions.ConnectionClosed as e:
-        print(e)
-        print('Payload length exceeds size limit ( > 1048576 bytes). Closing websocket')
-        currentSlot = ''
-        return
+    audioBinFile = yield from websocket.recv()
+    print('got audio')
+
 
     autoTempDir = tempfile.mkdtemp('temp_audio')
     videoTempDir = tempfile.mkdtemp('temp_video')
 
-    audioFilePath = '{}/{}.mp3'.format(autoTempDir, currentSlot)
-    videoFilePath = '{}/{}.mp4'.format(videoTempDir, currentSlot)
+    audioFilePath = '{}/z.mp3'.format(autoTempDir, connectionId)
+    videoFilePath = '{}/{}.mp4'.format(videoTempDir, connectionId)
     print('writting audio file ....')
     with open(audioFilePath, "wb") as file:
         audioBinFile = bytearray(audioBinFile)
@@ -51,7 +36,7 @@ def slot(websocket, path):
     args.input = audioFilePath
     args.output = videoFilePath
     args.genre = ''
-    #gen(args)
+    gen(args, lambda str: websocket.send(str))
 
     print('sending video file')
 
@@ -62,12 +47,11 @@ def slot(websocket, path):
         yield from websocket.send(video)
     print('sent video file')
 
-    currentSlot = ''
     print('Closing websocket')
     yield from websocket.close()
-    return
 
-start_server = websockets.serve(slot, 'localhost', 8765)
+
+start_server = websockets.serve(slot, 'localhost', 8765, max_size=2**27)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()

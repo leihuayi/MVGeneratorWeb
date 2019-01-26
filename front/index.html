@@ -12,7 +12,6 @@
 
         <script>
                 var ws;
-                var ws_status = false;
         
                 function connectChatServer() {
                     ws = new WebSocket("ws://127.0.0.1:8765");
@@ -22,45 +21,35 @@
                     ws.onmessage = function (evt) {
                         if (typeof evt.data == "string") {
                             console.log(evt.data);
-                            ws_status = true
                         }
                         else {
                             console.log("received video blob")
                             saveByteArray([evt.data], 'video.mp4');
                         }
                     };
-    
-                    ws.onclose = function() {
-                        ws_status = false
-                    };
+
                     ws.onerror = function(e) {
                         alert(e.msg);
-                        ws_status = false
                     }
         
                 }
         
                 function sendFile() {
-                    if (ws_status) {
-                        var file = document.getElementById('upload_audio').files[0];
-                        console.log('file name:'+file.name);
-                        var reader = new FileReader();
-                        var rawData = new ArrayBuffer();            
-            
-                        reader.loadend = function() {
-            
-                        }
-                        reader.onload = function(e) {
-                            rawData = e.target.result;
-                            ws.send(rawData)
-                            console.log("the File has been transferred.")
-                        }
-            
-                        reader.readAsArrayBuffer(file);
+                    var file = document.getElementById('upload_audio').files[0];
+                    console.log('file name:'+file.name);
+                    var reader = new FileReader();
+                    var rawData = new ArrayBuffer();
+
+                    reader.loadend = function() {
+
                     }
-                    else {
-                        alert("The server is currently busy. Please try another time");
+                    reader.onload = function(e) {
+                        rawData = e.target.result;
+                        ws.send(rawData)
+                        console.log("the File has been transferred.")
                     }
+
+                    reader.readAsArrayBuffer(file);
         
                 }
     
