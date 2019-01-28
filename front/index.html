@@ -7,13 +7,13 @@
     <body>
         <h1>YoutubeMVGenerator</h1>
         <p>Try uploading a music !</p>
-        <input type="file" id="upload_audio" onclick="connectChatServer()" onchange="sendFile()" />
-        <video id="video_holder"></video>
+        <input type="file" id="upload_audio" onclick="connectServer()" onchange="sendFile()" />
+        <div id="video_holder"></div>
 
         <script>
                 var ws;
         
-                function connectChatServer() {
+                function connectServer() {
                     ws = new WebSocket("ws://127.0.0.1:8765");
         
                     ws.binaryType = "blob"
@@ -51,39 +51,6 @@
 
                     reader.readAsArrayBuffer(file);
         
-                }
-    
-                function process(blob) {
-    
-                    const
-                    BYTES_PER_CHUNK = 1024 * 1024 * 2;
-                    // 2MB chunk sizes.
-                    const
-                    SIZE = blob.size;
-    
-                    var start = 0;
-                    var end = BYTES_PER_CHUNK;
-    
-                    while (start < SIZE) {
-    
-                        if ('mozSlice' in blob) {
-                            var chunk = blob.mozSlice(start, end);
-                        } else if ('slice' in blob) {
-                                var chunk = blob.slice(start, end);
-                        } else {
-                            var chunk = blob.webkitSlice(start, end);
-                        }
-    
-                        ws.send(chunk);
-    
-                        start = end;
-                        end = start + BYTES_PER_CHUNK;
-                    }
-                    ws.send(JSON.stringify({
-                        "cmd" : 2,
-                        "data" : blob.name
-                    }));
-                    //self.postMessage(blob.name + " Uploaded Succesfully");
                 }
     
                 var saveByteArray = (function () {
