@@ -4,7 +4,7 @@ import tempfile
 import uuid
 import argparse
 
-from YoutubeMVGenerator.src.generate_mv import main as gen
+# from YoutubeMVGenerator.src.generate_mv import main as gen
 
 
 @asyncio.coroutine
@@ -25,7 +25,8 @@ def slot(websocket, path):
     videoTempDir = tempfile.mkdtemp('temp_video')
 
     audioFilePath = '{}/{}.mp3'.format(autoTempDir, connectionId)
-    videoFilePath = '{}/{}.mp4'.format(videoTempDir, connectionId)
+    videoFilePath = 'some/path/to/a/video.mp4'
+    # videoFilePath = '{}/{}.mp4'.format(videoTempDir, connectionId)
     print('writting audio file ....')
     with open(audioFilePath, "wb") as file:
         audioBinFile = bytearray(audioBinFile)
@@ -36,7 +37,7 @@ def slot(websocket, path):
     args.input = audioFilePath
     args.output = videoFilePath
     args.genre = ''
-    gen(args, lambda str: (yield from websocket.send(str)))
+    # gen(args, lambda str: (yield from websocket.send(str)))
 
     print('sending video file')
 
