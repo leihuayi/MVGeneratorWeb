@@ -1,81 +1,122 @@
-<!DOCTYPE html>
 <html>
     <head>
-     <title>YoutubeMVGenerator</title>
-     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+        <title>Music Video Generator</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="index.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </head>
     <body>
-        <h1>YoutubeMVGenerator</h1>
-        <p>Try uploading a music !</p>
-        <input type="file" id="upload_audio" onclick="connectServer()" onchange="sendFile()" />
-        <div id="video_holder"></div>
-
-        <script>
-                var ws;
-        
-                function connectServer() {
-                    ws = new WebSocket("ws://127.0.0.1:8765");
-        
-                    ws.binaryType = "blob"
+        <div class="navbar-fixed">
+            <nav>
+                <div class="nav-wrapper red row">
+                    <a href="#" class="brand-logo hide-on-med-and-down"><img src="assets/youtubemvgenerator_logo.png" height="100%" alt=""></a>
+                    <ul class="right table-of-contents">
+                        <li><a href="#introduction" class="white-text">Upload</a></li>
+                        <li><a href="#gallery" class="white-text">Gallery</a></li>
+                        <li><a href="#method" class="white-text">Method</a></li>
+                        <li><a href="#about" class="white-text">About</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div id="app">
+            <div id="introduction" class="scrollspy">
+                <div class="parallax-container vertical-align">
+                    <div class="parallax"><img src="assets/music_video.jpg" alt="" srcset=""></div>
+                    <div class="center-align" style="padding-top:10%">
+                        <h3 class="white-text">Generate a Music Video from Youtube extracts !</h3>
+                        <p class="white-text">This works better with famous musics like pop, rock, hip-hop ...</p>
+                        <input type="file" class="white-text" id="upload_audio" onclick="connectServer()" onchange="sendFile()" />
+                    </div>
+                    
+                </div>
+            </div>
     
-                    ws.onmessage = function (evt) {
-                        if (typeof evt.data == "string") {
-                            console.log(evt.data);
-                        }
-                        else {
-                            console.log("received video blob")
-                            saveByteArray([evt.data], 'video.mp4');
-                        }
-                    };
-
-                    ws.onerror = function(e) {
-                        alert(e.msg);
-                    }
-        
-                }
-        
-                function sendFile() {
-                    var file = document.getElementById('upload_audio').files[0];
-                    console.log('file name:'+file.name);
-                    var reader = new FileReader();
-                    var rawData = new ArrayBuffer();
-
-                    reader.loadend = function() {
-
-                    }
-                    reader.onload = function(e) {
-                        rawData = e.target.result;
-                        ws.send(rawData)
-                        console.log("the File has been transferred.")
-                    }
-
-                    reader.readAsArrayBuffer(file);
-        
-                }
+            <div id="gallery" class="section scrollspy black">
+                <div class="container">
+                    <h3 class="white-text">Gallery</h3>
+                    
+                    <div class="carousel carousel-slider center">
     
-                var saveByteArray = (function () {
-                    var a = document.createElement("a");
-                    document.body.appendChild(a);
-                    a.style = "display: none";
-                    return function (data, name) {
-                        var blob = new Blob(data, {type: "octet/stream"}),
-                            url = window.URL.createObjectURL(blob);
-                        a.href = url;
-                        a.download = name;
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    };
-                }());
+                        <div class="carousel-item black white-text" href="#one!">
+                                <video width="640" height="360" controls>
+                                        <source src="assets/KiO2-R8yKjE_360.mp4" type="video/mp4">
+                                </video> 
+                                <p class="white-text"> Name of video 1</p>
+                        </div>
+                        <div class="carousel-item black white-text" href="#one!">
+                                <video width="640" height="360" controls>
+                                        <source src="assets/nY-Xk3sGr6Q_360.mp4" type="video/mp4">
+                                </video> 
+                                <p class="white-text"> Name of video 2</p>
+                        </div>
+                        <div class="carousel-item black white-text" href="#one!">
+                                <video width="640" height="360" controls>
+                                        <source src="assets/ogy8Ms1E5OM_360.mp4" type="video/mp4">
+                                </video> 
+                                <p class="white-text"> Name of video 3</p>
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+    
+            <div id="method" class="section scrollspy">
+                <div class="container">
+                    <div class="row">
+                        <div class="col s12 m5">
+                                <h5>How does it work</h5>
+                                <img class="responsive-img materialboxed" src="assets/method.png" alt="Music Video Generation Flowchart" srcset="">
+                                <p>This python algorithm takes in input a music, and outputs a Music Video which fits the input music, 
+                                        made from segments of Youtube MVs. This project was made in the wake of a Master Thesis in the Machine Learning department of Tsinghua University.
+                                    </p>
+                        </div>
+                        <div class="col s12 m5 offset-m2">
+                                <h5>The database</h5>
+                                <p>For the algorithm to work, you must have a data folder containing, for each video :</p>
+                                <ul>
+                                    <li>the video file (ex: video1.mp4)</li>
+                                    <li>a folder of the name name (ex: video1/) containing :</li>
+                                    <ul>
+                                        <li>all the video scenes from this video (ex: video1_001.mp4, video1_002.mp4, ...)</li>
+                                        <li>for each video scene file, a json file with 2 keys : its color histogram (array size 768) and its length in seconds</li>
+                                    </ul>
+                                </ul>
+                                <p>All this is explained on <a href="https://github.com/leihuayi/YoutubeMVGenerator">the project github</a>.</p>
+                        </div>
 
-                function displayVideo(data) {
+                    </div>
+                </div>
+            </div>
 
-                    var blob = new Blob(data, {type: "video/mp4"});
-                    var url = window.URL.createObjectURL(blob);
-
-                    var video = document.getElementById("video_holder")
-                    video.src = url;
-                }
-                
-            </script>
+            <div id="about" class="section red scrollspy">
+                <div class="container">
+                    <div class="row">
+                        <div class="col s12 m3">
+                            <img src="assets/moi-linkedin.jpg" alt="Sarah Gross profile picture" class="circle responsive-img">
+                        </div>
+                        <div class="col s12 m9">
+                            <h3>About</h3>
+                            <p>This project was done by <a href="http://www.linkedin.com/grsarah">Sarah Gross</a> in the wake of her Master Thesis research at Tsinghua University, Beijing, China.</p>
+                            <p>After a bachelor in engineering at CentraleSupélec, France, Sarah deepened her knowledge in computer science through several professional experiences and <a href="https://github.com/leihuayi">projects</a>. She now pursues a dual-degree in Advanced Computing at the Machine Learning lab of Tsinghua University, China.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m9">
+                            <h5>Acknowledgments</h5>
+                            <p>We are grateful to <a href="https://sites.google.com/site/xingxingwei1988/">Xingxing Wei</a> for his valuable advice throughout this research,</p>
+                            <p>and to <a href="https://github.com/HippoBaro">Hippolyte Barrault</a> for his help with this website.</p>
+                        </div>
+                        <div class="col s12 m3">
+                            <img src="assets/logo_tsinghua_small.png" class="responsive-img" alt="Tsinghua University Logo">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <script src="index.js"></script>
     </body>
 </html>
