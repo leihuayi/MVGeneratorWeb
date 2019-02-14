@@ -23,14 +23,41 @@
         </div>
         <div id="app">
             <div id="introduction" class="scrollspy">
-                <div class="parallax-container vertical-align">
+                <div class="parallax-container valign-wrapper">
                     <div class="parallax"><img src="assets/music_video.jpg" alt="" srcset=""></div>
-                    <div class="center-align" style="padding-top:10%">
-                        <h3 class="white-text">Generate a Music Video from Youtube extracts !</h3>
-                        <p class="white-text">This works better with famous musics like pop, rock, hip-hop ...</p>
-                        <input type="file" class="white-text" id="upload_audio" onclick="connectServer()" onchange="sendFile()" />
+                    <div class="container center-align" style="height: 80%; background-color:rgba(0, 0, 0, 0.6)">
+                        <h3 class="white-text">Generate a Music Video for your music !</h3>
+                        <p class="white-text">Our AI algorithm will use segments of real Youtube MVs to match your music.</p>
+                        <p class="white-text">This works better with famous musics like pop, rock, hip-hop ...</p><br>
+                        <p class="white-text">Chose now your music !</p>
+                        <input type="file" class="white-text" id="upload_audio" v-on:change="sendFile" />
+                        <br>
+                        <br>
+                        <br>
+                        <em class="white-text">-  already {{count}} MVs generated  -</em>
+                        <p class="red-text">{{error}}</p>
                     </div>
-                    
+                      <!-- Modal Structure -->
+                    <div id="modal-generate-info" class="modal">
+                        <div class="modal-content center-align">
+                            <h5>Your music video is being generated...</h5>
+                            <p>{{modal}}</p>
+                            <div class="preloader-wrapper big active">
+                                <div class="spinner-layer spinner-red-only">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div><div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close waves-effect waves-red btn-flat" v-on:click="cancelGeneration">Cancel</a>
+                        </div>
+                    </div>
                 </div>
             </div>
     
