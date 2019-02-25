@@ -25,9 +25,10 @@ var app = new Vue({
 
               var modal = document.getElementById('modal-generate-info');
               var instance = M.Modal.getInstance(modal);
-              app.modal = '';
+              
               app.hascanceled = false;
               instance.open();
+              app.modal = '(0/4) Sending audio file...';
           }
 
           reader.readAsArrayBuffer(file);
@@ -44,14 +45,14 @@ M.AutoInit();
 connectServer()
 
   function connectServer() {
-    ws = new WebSocket("ws://127.0.0.1:8765");
+    ws = new WebSocket("ws://TODO_ADRESS/backend/");
 
-    ws.binaryType = "blob"
+    ws.binaryType = "blob";
+
+    var modal = document.getElementById('modal-generate-info');
+    var instance = M.Modal.getInstance(modal);
 
     ws.onmessage = function (evt) {
-      var modal = document.getElementById('modal-generate-info');
-      var instance = M.Modal.getInstance(modal);
-
         if (typeof evt.data == "string") {
           if (evt.data == parseInt(evt.data, 10)) {
             app.count = evt.data
@@ -70,13 +71,14 @@ connectServer()
           console.log("received video blob")
           if (!app.hascanceled){
             instance.close();
-            saveByteArray([evt.data], 'video.mp4');
+            saveByteArray([evt.data], 'music_video.mp4');
             app.count = (parseInt(app.count)+1).toString()
           }
         }
     };
 
     ws.onerror = function(e) {
+        instance.close();
         app.error = 'The generation function is currently down, thank you for your understanding.'
     }
 
