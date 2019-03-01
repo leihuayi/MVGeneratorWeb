@@ -37,6 +37,16 @@ var app = new Vue({
       cancelGeneration : function() {
         this.hascanceled = true
         console.log("Video generation cancelled by user.")
+      },
+      carouselNext : function() {
+        var elem = document.getElementById("gallery-carousel");
+        var instance = M.Carousel.getInstance(elem);
+        instance.next()
+      },
+      carouselPrev : function() {
+        var elem = document.getElementById("gallery-carousel");
+        var instance = M.Carousel.getInstance(elem);
+        instance.prev()
       }
     }
   })

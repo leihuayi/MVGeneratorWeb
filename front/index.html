@@ -64,28 +64,40 @@
             <div id="gallery" class="section scrollspy black">
                 <div class="container">
                     <h3 class="white-text">Gallery</h3>
+                    <br>
                     
-                    <div class="carousel carousel-slider center">
-    
-                        <div class="carousel-item black white-text" href="#one!">
-                                <video width="640" height="360" controls>
-                                        <source src="assets/KiO2-R8yKjE_360.mp4" type="video/mp4">
-                                </video> 
-                                <p class="white-text"> Name of video 1</p>
+                        <div class="row valign-wrapper">
+                            <div class="col s1"><a class="white-text btn-floating btn-large waves-effect waves-light grey darken-2" v-on:click="carouselPrev">⯇</a></div>
+                            <div class="col s10">
+                                <div class="carousel carousel-slider center" id="gallery-carousel">
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="assets/mv_nelly_getlikeme.mp4" type="video/mp4">
+                                            </video> 
+                                            <p class="white-text"> Nelly - Get Like Me</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="assets/mv_feilunhai_superhot.mp4" type="video/mp4">
+                                            </video> 
+                                            <p class="white-text"> Feilunhai - Super Hot</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="assets/mv_moneycome.mp4" type="video/mp4">
+                                            </video> 
+                                            <p class="white-text"> Zuse - Money Come</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="assets/mv_muse_digdown.mp4" type="video/mp4">
+                                            </video> 
+                                            <p class="white-text"> Muse - Dig Down</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s1"><a class="white-text btn-floating btn-large waves-effect waves-light grey darken-2" v-on:click="carouselNext">⯈</a></div>
                         </div>
-                        <div class="carousel-item black white-text" href="#one!">
-                                <video width="640" height="360" controls>
-                                        <source src="assets/nY-Xk3sGr6Q_360.mp4" type="video/mp4">
-                                </video> 
-                                <p class="white-text"> Name of video 2</p>
-                        </div>
-                        <div class="carousel-item black white-text" href="#one!">
-                                <video width="640" height="360" controls>
-                                        <source src="assets/ogy8Ms1E5OM_360.mp4" type="video/mp4">
-                                </video> 
-                                <p class="white-text"> Name of video 3</p>
-                        </div>
-                    </div>
         
                 </div>
             </div>
@@ -134,7 +146,7 @@
                         <div class="col s12 m9">
                             <h5>Acknowledgments</h5>
                             <p>We are grateful to <a href="https://sites.google.com/site/xingxingwei1988/">Xingxing Wei</a> for his valuable advice throughout this research,</p>
-                            <p>and to <a href="https://github.com/HippoBaro">Hippolyte Barrault</a> for his help with this website.</p>
+                            <p>and to <a href="https://github.com/HippoBaro">Hippolyte Barrault</a> for his help on setting up this website.</p>
                         </div>
                         <div class="col s12 m3">
                             <img src="assets/logo_tsinghua_small.png" class="responsive-img" alt="Tsinghua University Logo">
