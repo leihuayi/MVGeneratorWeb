@@ -3,18 +3,11 @@ import websockets
 import tempfile
 import uuid
 import argparse
-from multiprocessing import Pool, Pipe
+from multiprocessing import Process, Pipe
 
 from YoutubeMVGenerator.src.generate_mv import main as gen
 
 count = 0
-p = Pool(2)
-
-def log_progress(ws):
-    while True:
-        progress = yield
-        print(progress)
-        yield from ws.send(progress)
 
 @asyncio.coroutine
 def slot(websocket, path):
@@ -51,9 +44,10 @@ def slot(websocket, path):
             args.data = '/home/sarah/YoutubeMVGenerator/statistics/songs_on_server.csv'
 
             parent_conn, child_conn = Pipe()
-            result_token = p.apply_async(gen, (args, child_conn))
+            proc = Process(gen, (args, child_conn))
+            proc.start()
 
-            while not result_token.ready():
+            while not proc.is_alive():
                 while parent_conn.poll():
                     yield from websocket.send(parent_conn.recv())
                 yield from asyncio.sleep(0.5)
@@ -61,9 +55,7 @@ def slot(websocket, path):
 
             while parent_conn.poll():
                 yield from websocket.send(parent_conn.recv())
-
-            if not result_token.successful():
-                result_token.get()
+            proc.join()
 
             # Send the video file
             print('sending video file')
