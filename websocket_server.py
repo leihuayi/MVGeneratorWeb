@@ -44,10 +44,10 @@ def slot(websocket, path):
             args.data = '/home/sarah/YoutubeMVGenerator/statistics/songs_on_server.csv'
 
             parent_conn, child_conn = Pipe()
-            proc = Process(gen, (args, child_conn))
+            proc = Process(target=gen, args=(args, child_conn))
             proc.start()
 
-            while not proc.is_alive():
+            while proc.is_alive():
                 while parent_conn.poll():
                     yield from websocket.send(parent_conn.recv())
                 yield from asyncio.sleep(0.5)
