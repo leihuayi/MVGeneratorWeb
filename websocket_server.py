@@ -3,11 +3,22 @@ import websockets
 import tempfile
 import uuid
 import argparse
+import os
+import json
 from multiprocessing import Process, Pipe
 
 from YoutubeMVGenerator.src.generate_mv import main as gen
 
 count = 0
+
+def makeTmpFiles():
+    connectionId = str(uuid.uuid4())
+
+    autoTempDir = tempfile.mkdtemp('temp_audio')
+    videoTempDir = tempfile.mkdtemp('temp_video')
+
+    return ('%s/%s.mp3'%(autoTempDir, connectionId), '%s/%s.mp4'%(videoTempDir, connectionId))
+
 
 @asyncio.coroutine
 def slot(websocket, path):
@@ -17,31 +28,33 @@ def slot(websocket, path):
     print('open socket')
     yield from websocket.send(str(count))
 
+    args = argparse.Namespace()
+    args.data = '/home/sarah/YoutubeMVGenerator/statistics/songs_on_server.csv'
+    args.input = ''
+    args.output = ''
+
     while True :
-        connectionId = str(uuid.uuid4())
-
-        # If receive audio
-        audioBinFile = yield from websocket.recv()
-        print('received audio file')
-
-        autoTempDir = tempfile.mkdtemp('temp_audio')
-        videoTempDir = tempfile.mkdtemp('temp_video')
-
-        audioFilePath = '{}/{}.mp3'.format(autoTempDir, connectionId)
-        videoFilePath = '{}/{}.mp4'.format(videoTempDir, connectionId)
-
         try:
-            print('writting audio file ....')
-            with open(audioFilePath, "wb") as file:
-                audioBinFile = bytearray(audioBinFile)
-                file.write(audioBinFile)
-            print('audio file written !')
+            # Receive from websocket
+            wsString = yield from websocket.recv()
+            if len(wsString) > 10:
+                print('received audio file ...')
+                audioFilePath, videoFilePath = makeTmpFiles()
+                with open(audioFilePath, "wb") as file:
+                    audioBinFile = bytearray(wsString)
+                    file.write(audioBinFile)
+                print('audio file written !')
+                args.input = audioFilePath
+                args.output = videoFilePath
+                args.genre = ''
 
-            args = argparse.Namespace()
-            args.input = audioFilePath
-            args.output = videoFilePath
-            args.genre = ''
-            args.data = '/home/sarah/YoutubeMVGenerator/statistics/songs_on_server.csv'
+            else :
+                args.genre = wsString
+                print('received genre')
+                if args.input == '' or args.output == '':
+                    yield from websocket.send('Error : order in sending info')
+                    continue
+
 
             parent_conn, child_conn = Pipe()
             proc = Process(target=gen, args=(args, child_conn))
@@ -58,19 +71,23 @@ def slot(websocket, path):
             proc.join()
 
             # Send the video file
-            print('sending video file')
-            yield from websocket.send("Downloading video...\n This might take a while depending on your location")
+            if os.path.exists(videoFilePath):
+                genreMissing = False
+                print('sending video file')
+                yield from websocket.send("Downloading video...\n This might take a while depending on your location")
 
-            with open(videoFilePath, "rb") as file:
-                video = file.read()
-                print("video is %d bytes" % len(video))
-                yield from websocket.send(video)
-            print('sent video file')
+                with open(videoFilePath, "rb") as file:
+                    video = file.read()
+                    print("video is %d bytes" % len(video))
+                    yield from websocket.send(video)
+                print('sent video file')
 
-            # Update generated videos
-            count += 1
-            with open("count_generated_videos.txt","w") as f:
-                f.write(str(count))
+                # Update generated videos
+                count += 1
+                with open("count_generated_videos.txt","w") as f:
+                    f.write(str(count))
+                
+                    
 
         except Exception as e:
             yield from websocket.send("Error : "+str(e))

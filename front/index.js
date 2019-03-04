@@ -21,13 +21,12 @@ var app = new Vue({
           reader.onload = function(e) {
               rawData = e.target.result;
               ws.send(rawData)
-              console.log("File "+file.name+" has successfully been transferred.")
-
-              var modal = document.getElementById('modal-generate-info');
-              var instance = M.Modal.getInstance(modal);
+              console.log("File "+file.name+" has successfully been sent.")
               
               app.hascanceled = false;
-              instance.open();
+              var instanceGen = M.Modal.getInstance(document.getElementById('modal-generate-info'));
+              instanceGen.options.dismissible=false;
+              instanceGen.open();
               app.modal = '(0/4) Sending audio file...';
           }
 
@@ -47,50 +46,66 @@ var app = new Vue({
         var elem = document.getElementById("gallery-carousel");
         var instance = M.Carousel.getInstance(elem);
         instance.prev()
+      },
+      inputGenre : function() {
+        var e = document.getElementById("select-genre");
+        ws.send(e.options[e.selectedIndex].value);
+        M.Modal.getInstance(document.getElementById('modal-generate-info')).open();
       }
     }
   })
 
+
+
 M.AutoInit();
-connectServer()
+connectServer();
 
-  function connectServer() {
-    ws = new WebSocket("ws://TODO_ADRESS/backend/");
+function connectServer() {
+  ws = new WebSocket("ws://ml.cs.tsinghua.edu.cn:8999/backend/");
 
-    ws.binaryType = "blob";
+  ws.binaryType = "blob";
 
-    var modal = document.getElementById('modal-generate-info');
-    var instance = M.Modal.getInstance(modal);
+  var modal = document.getElementById('modal-generate-info');
+  var instance = M.Modal.getInstance(modal);
 
-    ws.onmessage = function (evt) {
-        if (typeof evt.data == "string") {
-          if (evt.data == parseInt(evt.data, 10)) {
-            app.count = evt.data
-          }
-          else {
-            if (evt.data.substring(0,5) == "Error") {
-              instance.close();
-              app.error = evt.data
-            }
-            else {
-              app.modal = evt.data
-            }
-          } 
+  ws.onmessage = function (evt) {
+      if (typeof evt.data == "string") {
+        if (evt.data == parseInt(evt.data, 10)) {
+          app.count = evt.data
         }
         else {
-          console.log("received video blob")
-          if (!app.hascanceled){
+          if (evt.data.substring(0,5) == "Error" || evt.data.substring(0,5) == "Genre") {
             instance.close();
-            saveByteArray([evt.data], 'music_video.mp4');
-            app.count = (parseInt(app.count)+1).toString()
+            
+            if (evt.data.substring(0,5) == "Genre") {
+              var instanceGenre = M.Modal.getInstance(document.getElementById('modal-genre'));
+              instanceGenre.options.dismissible=false;
+              instanceGenre.open()
+            }
+            else {
+              app.error = evt.data
+            }
+            
           }
+          else {
+            app.modal = evt.data
+          }
+        } 
+      }
+      else {
+        console.log("received video blob")
+        if (!app.hascanceled){
+          instance.close();
+          saveByteArray([evt.data], 'music_video.mp4');
+          app.count = (parseInt(app.count)+1).toString()
         }
-    };
+      }
+  };
 
-    ws.onerror = function(e) {
-        instance.close();
-        app.error = 'The generation function is currently down, thank you for your understanding.'
-    }
+  ws.onerror = function(e) {
+      instance.close();
+      app.error = 'The generation function is currently down, thank you for your understanding.'
+  }
 
 }
 

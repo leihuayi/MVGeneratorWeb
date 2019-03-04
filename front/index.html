@@ -41,6 +41,8 @@
                     <div id="modal-generate-info" class="modal">
                         <div class="modal-content center-align">
                             <h5>Your music video is being generated...</h5>
+                            <h6>If this takes more than 3 minutes, try reloading the page.</h6>
+                            <br>
                             <p>{{modal}}</p>
                             <div class="preloader-wrapper big active">
                                 <div class="spinner-layer spinner-red-only">
@@ -58,6 +60,36 @@
                             <a href="#!" class="modal-close waves-effect waves-red btn-flat" v-on:click="cancelGeneration">Cancel</a>
                         </div>
                     </div>
+
+                    <div id="modal-genre" class="modal">
+                        <div class="modal-content center-align">
+                            <h5>Select a genre</h5>
+                            <p>Our algorithm could not find your music genre. Please try with another music or select here a genre.</p>
+
+                            <div class="container">
+                                <div class="input-field col s12">
+                                <select id="select-genre">
+                                  <option value="" disabled selected>Choose your option</option>
+                                  <option value="rock">Rock / Alternative / Metal</option>
+                                  <option value="hiphop">Hip-Hop / R&B / Rap</option>
+                                  <option value="electo">Electronic / Dance / Techno / House</option>
+                                  <option value="pop">Pop / Indie</option>
+                                </select>
+                                <label>Select genre</label>
+                            </div>
+                            </div>
+                            <br>
+
+                            <p>This step is important for matching videos consistent with your music.</p>
+                            <br>
+                            <em>Our algorithm works better with musics of the previous genres, since it relies on a database made of MVs of these genres !</em>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close waves-effect waves-green btn-flat" v-on:click="inputGenre">OK</a>
+                            <a href="#!" class="modal-close waves-effect waves-red btn-flat">Cancel</a>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
     
@@ -107,13 +139,14 @@
                     <div class="row">
                         <div class="col s12 m5">
                                 <h5>How does it work</h5>
-                                <img class="responsive-img materialboxed" src="assets/method.png" alt="Music Video Generation Flowchart" srcset="">
+                                <img class="responsive-img materialboxed" src="assets/method.png" alt="Music Video Generation Flowchart">
                                 <p>This python algorithm takes in input a music, and outputs a Music Video which fits the input music, 
                                         made from segments of Youtube MVs. This project was made in the wake of a Master Thesis in the Machine Learning department of Tsinghua University.
                                     </p>
                         </div>
                         <div class="col s12 m5 offset-m2">
                                 <h5>The database</h5>
+                                <img class="responsive-img materialboxed" src="assets/database.png" alt="Database creation Flowchart">
                                 <p>For the algorithm to work, you must have a data folder containing, for each video :</p>
                                 <ul>
                                     <li>the video file (ex: video1.mp4)</li>
