@@ -16,6 +16,7 @@
                         <li><a href="#introduction" class="white-text">Upload</a></li>
                         <li><a href="#gallery" class="white-text">Gallery</a></li>
                         <li><a href="#method" class="white-text">Method</a></li>
+                        <li><a href="#experiments" class="white-text">Experiments</a></li>
                         <li><a href="#about" class="white-text">About</a></li>
                     </ul>
                 </div>
@@ -28,7 +29,10 @@
                     <div class="container center-align" style="height: 80%; background-color:rgba(0, 0, 0, 0.6)">
                         <h3 class="white-text">Generate a Music Video for your music !</h3>
                         <p class="white-text">Our AI algorithm will use segments of real Youtube MVs to match your music.</p>
-                        <p class="white-text">This works better with famous musics like pop, rock, hip-hop ...</p><br>
+                        <p class="white-text">This works better with famous musics like pop, rock, hip-hop ...</p>
+                        <p class="white-text" style="font-style: italic">Disclaimer : the generated video might contain segments of explicit content. Viewer discretion is advised. </p>
+                        
+                        <br>
                         <p class="white-text">Chose now your music !</p>
                         <input type="file" class="white-text" id="upload_audio" v-on:change="sendFile" />
                         <br>
@@ -95,13 +99,67 @@
     
             <div id="gallery" class="section scrollspy black">
                 <div class="container">
-                    <h3 class="white-text">Gallery</h3>
+                    <h3 class="white-text center-align">Gallery</h3>
                     <br>
                     
                         <div class="row valign-wrapper">
                             <div class="col s1"><a class="white-text btn-floating btn-large waves-effect waves-light grey darken-2" v-on:click="carouselPrev">⯇</a></div>
                             <div class="col s10">
                                 <div class="carousel carousel-slider center" id="gallery-carousel">
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_518.mp4" type="video/mp4">
+                                            </video> 
+                                            <p class="white-text"> Flipo - Doh Tell Meh Dat</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_019.mp4" type="video/mp4">
+                                            </video> 
+                                            <p class="white-text"> Rae Sremmurd - Throw Sum Mo</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_199.mp4" type="video/mp4">
+                                            </video> 
+                                            <p class="white-text"> Ariana Grande - Everyday</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                            <video width="640" height="360" controls>
+                                                    <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_215.mp4" type="video/mp4">
+                                            </video>
+                                            <p class="white-text"> Gnarls Barkley - Crazy</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                        <video width="640" height="360" controls>
+                                                <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_166.mp4" type="video/mp4">
+                                        </video>
+                                        <p class="white-text"> Limp Bizkit - Ready to go</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                        <video width="640" height="360" controls>
+                                                <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_184.mp4" type="video/mp4">
+                                        </video>
+                                        <p class="white-text"> Florence + The Machine - Spectrum (Say my name)</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                        <video width="640" height="360" controls>
+                                                <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_914.mp4" type="video/mp4">
+                                        </video>
+                                        <p class="white-text"> Estelle ft. Kanye West - American Boy</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                        <video width="640" height="360" controls>
+                                                <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_481.mp4" type="video/mp4">
+                                        </video>
+                                        <p class="white-text"> Rock N Roll Soldiers - Flag Song</p>
+                                    </div>
+                                    <div class="carousel-item black white-text" href="#one!">
+                                        <video width="640" height="360" controls>
+                                                <source src="http://ml.cs.tsinghua.edu.cn/~sarah/experiments/vid_813.mp4" type="video/mp4">
+                                        </video>
+                                        <p class="white-text"> Lil Uzi Vert - Seven Million (feat. Future)</p>
+                                    </div>
                                     <div class="carousel-item black white-text" href="#one!">
                                             <video width="640" height="360" controls>
                                                     <source src="assets/mv_nelly_getlikeme.mp4" type="video/mp4">
@@ -113,18 +171,6 @@
                                                     <source src="assets/mv_feilunhai_superhot.mp4" type="video/mp4">
                                             </video> 
                                             <p class="white-text"> Feilunhai - Super Hot</p>
-                                    </div>
-                                    <div class="carousel-item black white-text" href="#one!">
-                                            <video width="640" height="360" controls>
-                                                    <source src="assets/mv_moneycome.mp4" type="video/mp4">
-                                            </video> 
-                                            <p class="white-text"> Zuse - Money Come</p>
-                                    </div>
-                                    <div class="carousel-item black white-text" href="#one!">
-                                            <video width="640" height="360" controls>
-                                                    <source src="assets/mv_muse_digdown.mp4" type="video/mp4">
-                                            </video> 
-                                            <p class="white-text"> Muse - Dig Down</p>
                                     </div>
                                 </div>
                             </div>
@@ -140,27 +186,63 @@
                         <div class="col s12 m5">
                                 <h5>How does it work</h5>
                                 <img class="responsive-img materialboxed" src="assets/method.png" alt="Music Video Generation Flowchart">
-                                <p>This python algorithm takes in input a music, and outputs a Music Video which fits the input music, 
-                                        made from segments of Youtube MVs. This project was made in the wake of a Master Thesis in the Machine Learning department of Tsinghua University.
-                                    </p>
-                        </div>
+                                <p>This algorithm is a novel method to automatically generate, from an input music, a music video made of segments of Youtube music videos 
+                                    which would fit this music. Once you have submitted your music file, the algorithm performs the following steps :</p>
+                                <ol>
+                                    <li>Find boundaries in the input music at key music changes (transitions between verse/chorus/bridge etc.)</li>
+                                    <li>Find input music genre</li>
+                                    <li>Fetch in database videos with the same genre as found at step 2</li>
+                                    <li>Apply K-Means on the color histogram feature to cluster together scenes from videos found at step 3</li>
+                                    <li>Randomly select $C$ clusters from clusters created at step 4</li>
+                                    <li>Assemble them around the boundaries found at step 1.</li>
+                                </ol>
+                                <p>Step 1 is performed using the Python module <a href="https://pythonhosted.org/msaf/index.html">MSAF</a> with <a href="http://www.ee.columbia.edu/~dpwe/pubs/McFeeE14-segments.pdf">OLDA</a> algorithm.</p>
+                                <p>Step 2 is performed by recognizing the input music using <a href="https://www.acrcloud.com/docs/acrcloud/introduction/">ACR Cloud</a> recognition API, which unfortunately limits 100 queries per day. If the algorithm asked you to manually input the music genre, this is probably the reason !</p>
+                                <p>Step 4 is performed using Python module scikit-learn's built-in Kmeans function on data we stored in json files (see "database" section).</p>
+                                <p>Further details on how to run this algorithm yourself are given on the <a href="https://github.com/leihuayi/YoutubeMVGenerator">project github</a>.</p>                     
+                            </div>
                         <div class="col s12 m5 offset-m2">
                                 <h5>The database</h5>
                                 <img class="responsive-img materialboxed" src="assets/database.png" alt="Database creation Flowchart">
                                 <p>For the algorithm to work, you must have a data folder containing, for each video :</p>
-                                <ul>
+                                <ol>
                                     <li>the video file (ex: video1.mp4)</li>
                                     <li>a folder of the name name (ex: video1/) containing :</li>
                                     <ul>
-                                        <li>all the video scenes from this video (ex: video1_001.mp4, video1_002.mp4, ...)</li>
-                                        <li>for each video scene file, a json file with 2 keys : its color histogram (array size 768) and its length in seconds</li>
+                                        <li>- all the video scenes from this video (ex: video1_001.mp4, video1_002.mp4, ...)</li>
+                                        <li>- for each video scene file, a json file with 2 keys : its color histogram (array size 768) and its length in seconds</li>
                                     </ul>
-                                </ul>
-                                <p>All this is explained on <a href="https://github.com/leihuayi/YoutubeMVGenerator">the project github</a>.</p>
-                        </div>
+                                </ol>
+                                In order to acheive this database configuration, we performed the following steps :
+                                <ol>
+                                    <li>Download music videos from <a href="https://research.google.com/youtube8m/index.html">Youtube-8M</a> dataset released by Youtube for research purposes.</li>
+                                    <li>For each video file, separate the video into scenes (= video shots with no cuts)</li>
+                                    <li>Calculate the color histogram for each scene</li>
+                                    <li>Store the color histogram array and the duration for each scene into a json file</li>
+                                </ol>
+                                <p>The color histograms are flattened 256 x 3 arrays calculated with cv2 Python module.</p>
+                                <p>Step 2 is performed using Python module <a href="https://github.com/Breakthrough/PySceneDetect">PySceneDetect</a> with the default configuration (content-aware detection mode).</p>
+                                <p>Some helper functions are provided on the <a href="https://github.com/leihuayi/YoutubeMVGenerator">project github</a> to help you to easily reach this database configuration if you wish to try the algorithm yourself.</p>
+                            </div>
 
                     </div>
                 </div>
+            </div>
+            <div id="experiments" class="section scrollspy grey">
+                    <div class="container">
+                        <h3>Experiments</h3>
+                        <br>  
+                        <p>The point of this work was to create music videos which would not be recognizable from music videos made by humans.</p>
+                        <b>Did we succeed ?</b>
+                        <p>In order to evaluate this, we asked volunteeds to decide, in a batch of 30 videos, which were generated MVs, amateur MVs (fan-made), or professional MVs (officially made for the artist). The batch contained 15 generated MVs, 8 amateur and 7 professional. You can see the videos used for that experiment on <a href="https://sites.google.com/view/music-video-generation">this website</a>. </p>
+                        <br>
+                        <p>The results were far better than expected ! In 45.5% of cases, our generated videos are mistaken for generated videos and in 21.6% of cases for amateur videos !</p>
+                        <p>The below pie charts summarize the labels (PRO = professional, AMA = amateur, GEN = generated) given by the users for each kind of music video.</p>
+                        <div class="row">
+                            <div class="col s12 m10 offset-m2"><img class="responsive-img materialboxed" src="assets/experiments.png" alt="Evalutation results"></div>
+                        </div>
+                        
+                    </div>
             </div>
 
             <div id="about" class="section red scrollspy">
