@@ -2,6 +2,9 @@
 
 This project is a website to generate a Music Video for an input music.
 
+Click on the caption below for a demo video.
+[![Demo](http://img.youtube.com/vi/XFnFXVnM4Us/0.jpg)](https://youtu.be/XFnFXVnM4Us)
+
 ## Requirements :
 * websockets
 * from [YoutubeMVGenerator](https://github.com/leihuayi/YoutubeMVGenerator) :
